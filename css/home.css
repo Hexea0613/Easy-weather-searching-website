@@ -1,0 +1,149 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background-image: url("../image/background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 500px;
+    align-items: center;
+    padding: 10px;
+    color: white;
+}
+
+header h1 {
+    margin: 0;
+}
+
+h1 {
+    color: white;
+    font-size: 42px;
+    margin: 0;
+}
+
+.acc {
+    color: white;
+    margin-left: 20px;
+    font-size: 24px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+li {
+    margin: 0 10px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.title {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    font-size: 50px;
+}
+
+main {
+    text-align: center;
+   
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 50px 0;
+}
+
+main h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+main form {
+    margin-bottom: 20px;
+}
+
+main input[type="text"] {
+    padding: 5px;
+    font-size: 18px;
+}
+
+main button {
+    padding: 8px 16px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+main button:hover {
+    background-color: #45a049;
+}
+
+#weather-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 0 auto;
+    max-width: 80%;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+#curr-wea {
+    background-color: rgba(144, 238, 144, 0.5);
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}

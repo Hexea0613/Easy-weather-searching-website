@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="css/form2.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <title>Register</title>
+    <script> 
+        function validateForm() {
+            var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var password_confirm = document.getElementById("password_confirm").value;
+
+            var pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            var sql_pattern = /['\"]/;
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "check_username.php?username=" + username, false);
+            xmlhttp.send();
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var response = xmlhttp.responseText;
+                if (response == "exist") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Duplicate username!',
+                        text: 'The username already exists.',
+                        })
+                    return false;
+                }       
+            }
+
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "check_email.php?email=" + email, false);
+            xmlhttp.send();
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var response = xmlhttp.responseText;
+                if (response == "exist") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Duplicate email!',
+                        text: 'The email already exists.',
+                        })
+                    return false;
+                }       
+            }
+            
+            if (pattern.test(password)) {
+                if(password == password_confirm){
+                    if(sql_pattern.test(username) || sql_pattern.test(password) || sql_pattern.test(email))
+                    {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Registration errors!',
+                            text: 'The problem of SQL injection occurs.',
+                        })
+                        return false;
+                    }
+                }
+                else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration errors!',
+                        text: 'The retyped password is not matched the password.',
+                        })
+                    return false;
+                }
+            } 
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration errors!',
+                    text: 'The password does not reach the length requirement (at least 8)and does not include at least one capital letter, a lowercase letter, and a number.',
+                })
+                return false;
+            }
+
+            return true;
+        }
+        
+        function submitForm(e) {
+            e.preventDefault();
+
+            if (validateForm()) {
+                var formData = new FormData(document.getElementById("registerForm"));
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        var response = JSON.parse(xmlhttp.responseText);
+
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Registration Successful',
+                                text: 'Press OK to redirect to login page.',
+                            }).then(() => {
+                                window.location.href = 'login.html';
+                                });
+                        } 
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Registration Failed',
+                                text: response.message,
+                            });
+                        }
+                    }
+                };
+
+                xmlhttp.open("POST", "register.php", true);
+                xmlhttp.send(formData);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById("registerForm").addEventListener("submit", submitForm);
+        });
+        
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Register a new membership</h1>
+        <form name="registerForm" id ="registerForm" method="post" onsubmit="return false;"> 
+            <input type="text" name="username" id="username" placeholder="Username" required><br/><br/>
+            <input type="email" name="email" id="email" placeholder="Email" required><br/><br/>
+            <input type="password" name="password" id="password" placeholder="Password" required><br/><br/>
+            <input type="password" name="password_confirm" id="password_confirm" placeholder="Retype password" required><br/><br/>
+            <input type="submit" value="Register" name="submit"><br/><br/>
+            <a href="login.html">I already have a membership</a>
+        </form>
+    </div> 
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="css/form.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <title>Login</title>
+        <script> 
+            function validateForm() {
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var sql_pattern = /['\"]/;
+
+                  
+                if(sql_pattern.test(email) || sql_pattern.test(password)){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration errors!',
+                        text: 'The problem of SQL injection occurs.',
+                    })
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            
+            function submitForm(e) {
+                e.preventDefault();
+
+                if (validateForm()) {
+                    var formData = new FormData(document.getElementById("loginForm"));
+                    var xmlhttp = new XMLHttpRequest();
+
+                    xmlhttp.onreadystatechange = function() {
+                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                            var response = JSON.parse(xmlhttp.responseText);
+
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Login Successful!',
+                                    text: 'Press OK to redirect to home page.',
+                                }).then(() => {
+                                    window.location.href = 'home.php';
+                                    });
+                            } 
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Login Failed!',
+                                    text: response.message,
+                                });
+                            }
+                        }
+                    };
+
+                    xmlhttp.open("POST", "login.php", true);
+                    xmlhttp.send(formData);
+                }
+            }
+
+            window.addEventListener('DOMContentLoaded', function() {
+                document.getElementById("loginForm").addEventListener("submit", submitForm);
+            });
+        </script>
+</head>
+<body>
+    <div class ="container">
+        <h1>Login</h1>
+        <form name="loginForm" id ="loginForm" method="post" onsubmit="return false;"> 
+            <input type="email" name="email" id="email" placeholder="Email" required><br/><br/><br/><br/>
+            <input type="password" name="password" id="password" placeholder="Password" required><br/><br/>
+            <input type="submit" value="Login" name="submit"><br/><br/>
+            <a href="register.html">Register a new membership</a>
+        </form>
+    </div>
+    
+</body>
+</html>
